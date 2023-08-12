@@ -57,7 +57,7 @@ export async function loginUser(req: any, res: any): Promise<any> {
   console.log("🚀 ~ file: user.controller.ts:55 ~ loginUser ~ username:", username)
   if (!username || !password) {
     res.status(400).json({
-      message: "All fields are mandatory",
+      message: "Fill all the details",
     });
   }
   const user = await userServices.findUserByName(username);
@@ -118,8 +118,8 @@ export async function addWalletAddress(req: any, res: any): Promise<any> {
 
 export async function updateUser(req: any, res: any): Promise<any> {
   // res.set('Access-Control-Allow-Origin', 'http://localhost:3000');
-  const { username, email, phone, walletAddress } = req.body;
-  if (!username || !email || !phone || !walletAddress) {
+  const { email, phone } = req.body;
+  if (!email || !phone) {
     res.status(400).json({
       message: "Fill all the details",
     });
@@ -127,20 +127,14 @@ export async function updateUser(req: any, res: any): Promise<any> {
   const user = await userServices.findUserById(req.user.id);
   if (user) {
     let userAvailable = await userServices.findUserByEmail(email);
-
-    if(!userAvailable || userAvailable._id.toString() == req.user.id){
-      userAvailable  = await userServices.findUserByWalletAddress(walletAddress);
-    }
     if (userAvailable && userAvailable._id.toString() != req.user.id) {
       res.status(400).json({
-        message: "Email id or WalletAddress registered",
+        message: "Email id or Username is already registered",
       });
     } else {
       const updatedUser = await userServices.updateUser(req.user.id, {
-        username,
         email,
         phone,
-        walletAddress,
       });
       res.status(200).json({ updatedUser });
     }

@@ -12,9 +12,8 @@ export class UserServices {
         return await UserSchema.findOne({ email });
     }
     
-    async findUserByName (name: string) : Promise<typeof UserInterface> {
-        console.log("🚀 ~ file: user.services.ts:16 ~ UserServices ~ findUserByName ~ name:", name)
-        return await UserSchema.findOne({ username:name });
+    async findUserByName (username: string) : Promise<typeof UserInterface> {
+        return await UserSchema.findOne({ username });
     }
 
     async findUserByWalletAddress (walletAddress: string) : Promise<typeof UserInterface> {
